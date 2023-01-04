@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const mongoose = require('mongoose');
+mongoose.set('strictQuery', true);
 const { User, validate } = require('../models/user');
 
 
@@ -11,7 +12,6 @@ module.exports.SignUp = async (req, res) => {
     let user = {};
     if (mongoose.connection.readyState === 0) {
         await mongoose.connect(process.env.MONGODB_URL_LOCAL);
-        mongoose.set('strictQuery', true);
         console.log("Connection successfull");
     }
     user = await User.findOne({ email: req.body.email });
@@ -26,7 +26,6 @@ module.exports.SignUp = async (req, res) => {
 module.exports.SignIn = async (req, res) => {
     if (mongoose.connection.readyState === 0) {
         await mongoose.connect(process.env.MONGODB_URL_LOCAL);
-        mongoose.set('strictQuery', true);
         console.log("Connection successfull");
     }
     const user = await User.findOne({ email: req.body.email });
