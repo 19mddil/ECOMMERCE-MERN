@@ -37,6 +37,7 @@ userSchema.methods.genJWT = function () {
         email: this.email,
         role: this.role
     }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" });
+    return token;
 }
 
 const validateUser = user => {
@@ -44,7 +45,7 @@ const validateUser = user => {
         name: Joi.string().min(3).max(100).required(),
         email: Joi.string().min(5).max(255).required(),
         password: Joi.string().min(5).max(255).required(),
-        role: Joi.string().min(5).max(255)
+        role: Joi.string().min(4).max(255)
     });
     return schema.validate(user);
 }

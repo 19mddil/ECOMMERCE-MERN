@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
     if (!token) return res.status(401).send("Sorry the user is unauthorised");
     token = token.split(' ')[1].trim();
     try {
-        let payload = jwt.verify(token, process.env.SECRETKEY);
+        let payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
         req.user = payload;
         next();
     } catch (e) {

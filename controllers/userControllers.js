@@ -20,7 +20,6 @@ module.exports.SignUp = async (req, res) => {
     req.body.password = await bcrypt.hash(req.body.password, salt);
     user = await User.create(req.body);
     res.status(201).send({ messeage: "Registraton Successful", user: _.pick(user, ['name', 'email', 'password', 'role']), token: user.genJWT() });
-
 }
 
 module.exports.SignIn = async (req, res) => {

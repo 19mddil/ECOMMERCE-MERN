@@ -1,12 +1,12 @@
 const { Schema, model } = require('mongoose');
-const Joi = require(joi);
+const Joi = require('joi');
 
 module.exports.Category = model('categories', Schema({
     name: {
         type: String,
         unique: true
     }
-}, { timestamp: true }));
+}, { timestamps: true }));
 
 module.exports.validate = category => {
     const schema = Joi.object({

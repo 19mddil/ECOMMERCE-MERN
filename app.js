@@ -10,14 +10,14 @@ const categoryRouter = require('./routers/categoryRouter');
 app.use(express.json());
 app.use(cors());
 
-app.get('/', (req, res) => res.send("hello"));
-app.use('/api/user', userRouter);
-app.use('/api/category', categoryRouter);
-app.use(error);
-
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
+
+app.get('/', (req, res) => res.send("hello"));
+app.use('/api/user', userRouter);
+app.use('/api/category', categoryRouter);
+app.use(error);
 
 module.exports = app;
