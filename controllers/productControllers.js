@@ -44,7 +44,7 @@ module.exports.createProduct = async (req, res) => {
 }
 
 module.exports.getProducts = async (req, res) => {
-    const products = await Product.find().select({ name: 1, description: 1, price: 1, quantity: 1, category: 1 });
+    const products = await Product.find().select({ photo: 0 });
     return res.status(200).send(products);
 }
 
