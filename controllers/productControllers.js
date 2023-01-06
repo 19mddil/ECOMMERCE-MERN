@@ -4,6 +4,16 @@ const mongoose = require('mongoose');
 const formidable = require('formidable');
 const fs = require('fs');
 
+const dbcon = async () => {
+    await mongoose.connect(process.env.MONGODB_URL_LOCAL);
+    console.log("Connection successfull");
+}
+
+if (mongoose.connection.readyState === 0) {
+    dbcon();
+}
+
+
 module.exports.createProduct = async (req, res) => {
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
@@ -13,7 +23,8 @@ module.exports.createProduct = async (req, res) => {
         if (error) return res.status(400).send(error.details[0].message);
         const product = new Product(fields);
         if (files.photo) {
-            fs.readFile(files.photo.path, (err, data) => {
+            console.log(files.photo);
+            fs.readFile(files.photo.filepath, (err, data) => {
                 if (err) return res.status(400).send("Problem in file data");
                 product.photo.data = data;
                 product.photo.contentType = files.photo.type;
@@ -21,7 +32,7 @@ module.exports.createProduct = async (req, res) => {
                     if (err) res.status(500).send("Internal Server Error");
                     else return res.status(201).send({
                         message: "product created successfully",
-                        data: validate(_.pick(result, ['name', 'description', 'price', 'category', 'quantity']))
+                        data: _.pick(result, ['name', 'description', 'price', 'category', 'quantity'])
                     })
                 });
             })

@@ -3,7 +3,7 @@ const Joi = require('joi');
 
 module.exports.Product = model('products', Schema({
     name: String,
-    desciption: String,
+    description: String,
     price: Number,
     category: {
         type: Schema.Types.ObjectId,
