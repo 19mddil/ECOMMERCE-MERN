@@ -56,9 +56,60 @@ module.exports.getProducts = async (req, res) => {
 }
 
 module.exports.updateProductsById = async (req, res) => {
+    const productId = req.params.id;
+    const product = await Product.findById(productId);
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+    form.parse(req, (err, fields, files) => {
+        if (err) return res.status(400).send("Something went wrong");
+        const updatedFields = _.pick(fields, ['name', 'description', 'price', 'category', 'quantity']);
+        _.assign(product, updatedFields);
+        if (files.photo) {
+            fs.readFile(files.photo.filepath, (err, data) => {
+                if (err) return res.status(400).send("Problem in file data");
+                product.photo.data = data;
+                product.photo.contentType = files.photo.type;
+                product.save((err, result) => {
+                    if (err) res.status(500).send("Internal Server Error");
+                    else return res.status(201).send({
+                        message: "product updated successfully",
+                        data: _.pick(result, ['name', 'description', 'price', 'category', 'quantity'])
+                    })
+                });
+            })
+        } else {
+            product.save((err, result) => {
+                if (err) res.status(500).send("Internal Server Error");
+                else return res.status(201).send({
+                    message: "product updated successfully",
+                    data: _.pick(result, ['name', 'description', 'price', 'category', 'quantity'])
+                })
+            });
+        }
 
+    })
+}
+
+module.exports.getPhotoById = async (req, res) => {
+    const productId = req.params.id;
+    try {
+        const product = await Product.findById(productId)
+            .select({ photo: 1, _id: 0 });
+        res.set('Content-Type', product.photo.contentType);
+        return res.status(200).send(product.photo.data);
+    } catch (e) {
+        return res.status(404).send("not found");
+    }
 }
 
 module.exports.getProductsById = async (req, res) => {
-
+    const productId = req.params.id;
+    try {
+        const product = await Product.findById(productId)
+            .select({ photo: 0 })
+            .populate('category', 'name');
+        return res.status(200).send(product);
+    } catch (e) {
+        return res.status(404).send("not found");
+    }
 }

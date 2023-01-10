@@ -3,7 +3,8 @@ const {
     getProducts,
     getProductsById,
     createProduct,
-    updateProductsById
+    updateProductsById,
+    getPhotoById
 } = require('../controllers/productControllers');
 const admin = require('../middlewares/admin');
 const authorize = require('../middlewares/authorize');
@@ -15,5 +16,8 @@ router.route('/')
 router.route('/:id')
     .get(getProductsById)
     .put([authorize, admin], updateProductsById);
+
+router.route('/photo/:id')
+    .get(getPhotoById);
 
 module.exports = router;
