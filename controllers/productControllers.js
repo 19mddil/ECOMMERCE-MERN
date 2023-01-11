@@ -45,7 +45,7 @@ module.exports.createProduct = async (req, res) => {
 
 module.exports.getProducts = async (req, res) => {
     let order = req.query.order === 'desc' ? -1 : 1;
-    let sortBy = req.query.sortby ? req.query.sortBy : '_id';
+    let sortBy = req.query.sortBy ? req.query.sortBy : '_id';
     let limit = req.query.limit ? parseInt(req.query.limit) : 10;
     const products = await Product.find()
         .select({ photo: 0 })
@@ -112,4 +112,49 @@ module.exports.getProductsById = async (req, res) => {
     } catch (e) {
         return res.status(404).send("not found");
     }
+}
+
+const body = {
+    order: 'desc',
+    sortBy: 'price',
+    limit: 6,
+    skip: 20,
+    filters: {
+        price: [0, 1000],
+        category: ['sdfasldfksd', 'lsdkfsfsfffsf', 'dslfslfsdfk']
+    }
+}
+
+module.exports.filterProducts = async (req, res) => {
+    console.log(req.body);
+    let order = req.body.order === 'desc' ? -1 : 1;
+    let sortBy = req.body.sortBy ? req.body.sortBy : '_id';
+    let limit = req.body.limit ? parseInt(req.body.limit) : 10;
+    let skip = parseInt(req.body.skip);
+    let filters = req.body.filters;
+    let args = {};
+
+    for (let key in filters) {
+        if (filters[key].length > 0) {
+            if (key === 'price') {
+                args['price'] = {
+                    $gte: filters['price'][0],
+                    $lte: filters['price'][1]
+                }
+            }
+            if (key === 'category') {
+                args['category'] = {
+                    $in: filters['category']
+                }
+            }
+        }
+    }
+
+    const products = await Product.find(args)
+        .select({ photo: 0 })
+        .sort({ [sortBy]: order })
+        .skip(skip)
+        .limit(limit)
+        .populate('category', 'name');
+    return res.status(200).send(products);
 }

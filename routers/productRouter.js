@@ -4,7 +4,8 @@ const {
     getProductsById,
     createProduct,
     updateProductsById,
-    getPhotoById
+    getPhotoById,
+    filterProducts
 } = require('../controllers/productControllers');
 const admin = require('../middlewares/admin');
 const authorize = require('../middlewares/authorize');
@@ -19,5 +20,8 @@ router.route('/:id')
 
 router.route('/photo/:id')
     .get(getPhotoById);
+
+router.route('/filter')
+    .post(filterProducts);
 
 module.exports = router;
