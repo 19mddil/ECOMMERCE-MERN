@@ -10,8 +10,8 @@ const authorize = require('../middlewares/authorize');
 router.route('/')
     .get(authorize, getCartItem)
     .post(authorize, createCartItem)
-router.route('/:id')
     .put(authorize, updateCartItem)
+router.route('/:id')
     .delete(authorize, deleteCartItem)
 
 module.exports = router;
