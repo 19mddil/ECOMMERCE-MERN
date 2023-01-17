@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const { Profile } = require('../models/profile');
+const { Profile } = require('../models/userProfile');
 
 module.exports.getProfile = async (req, res) => {
     const userId = req.user._id;
