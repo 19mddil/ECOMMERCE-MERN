@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useEffect } from "react";
+import Navigation from './header/Navigation';
 
 const Layout = ({ title = 'Title', className, children }) => {
     useEffect(() => {
@@ -9,7 +10,7 @@ const Layout = ({ title = 'Title', className, children }) => {
     return (
         <div>
             <div className="mb-3">
-                <h3>Layout </h3>
+                <Navigation />
             </div>
             <div className={className}>
                 {children}
