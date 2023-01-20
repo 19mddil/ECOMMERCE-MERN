@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { API } from '../../utils/config';
+import { API } from '../utils/config';
 
 export const register = user => {
     return axios.post(`${API}/user/signup`, user, {

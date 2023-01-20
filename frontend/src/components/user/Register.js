@@ -2,7 +2,8 @@ import React from 'react';
 import { useState } from 'react';
 import Layout from '../Layout';
 import { showError, showLoading } from '../../utils/messages';
-import { register } from '../api/apiAuth';
+import { register } from '../../api/apiAuth';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
     const [values, setValues] = useState({
@@ -27,7 +28,39 @@ const Register = () => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        console.log(JSON.stringify(values));
+        setValues({
+            ...values,
+            error: false,
+            loading: true,
+            disabled: true
+        });
+
+        //this is a axios function
+        register({
+            name,
+            email,
+            password
+        }).then(response => {
+            setValues({
+                name: '',
+                email: '',
+                password: '',
+                success: true,
+                disabled: false,
+                loading: false
+            })
+        }).catch(err => {
+            let errMsg = 'Something went wrong';
+            if (err.response) {
+                errMsg = err.response.data;
+            }
+            setValues({
+                ...values,
+                error: errMsg,
+                disabled: false,
+                loading: false
+            })
+        })
     }
 
     const signUpForm = () => (
@@ -51,8 +84,19 @@ const Register = () => {
         </form>
     );
 
+    const showSuccess = () => {
+        if (success) return (
+            <div className='alert alert-primary'>
+                New account Created. Please <Link to='/login'>Login</Link>
+            </div>
+        )
+    }
+
     return (
         <Layout title="Register" className="container col-md-8 offset-md-2">
+            {showSuccess(success)}
+            {showLoading(loading)}
+            {showError(error, error)}
             <h3>Register Here,</h3>
             <hr />
             {signUpForm()}
