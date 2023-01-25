@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Nav, Navbar, NavbarBrand, NavItem, NavbarToggler, Collapse } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { signout, isAuthenticated } from '../../utils/auth'
-import { Dashboard } from '../user/Dashboard'
+import { signout, isAuthenticated } from '../../utils/auth';
 
 class Navigation extends Component {
     constructor(props) {
@@ -20,7 +19,7 @@ class Navigation extends Component {
         return (
             <div >
                 <Navbar dark color='dark' expand="sm">
-                    <NavbarBrand href='/' >Restuarant Project 2</NavbarBrand>
+                    <NavbarBrand href='/' >Ecommerce Project 2</NavbarBrand>
                     <NavbarToggler onClick={this.navToggler} />
                     <Collapse isOpen={this.state.isNavOpen} navbar>
                         <Nav className='mr-auto' navbar>
@@ -42,11 +41,10 @@ class Navigation extends Component {
                                         <Link to='/logout' className='nav-link' onClick={() => { signout() }} >Logout</Link>
                                     </NavItem>
                                     <NavItem>
-                                        <Link to='/dashboard' className='nav-link' >User Dashboard</Link>
+                                        <Link to='/dashboard' className='nav-link'>User Dashboard</Link>
                                     </NavItem>
                                 </>)
                             }
-
                         </Nav>
                     </Collapse>
                 </Navbar >
