@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Nav, Navbar, NavbarBrand, NavItem, NavbarToggler, Collapse } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { signout, isAuthenticated } from '../../utils/auth'
+import { Dashboard } from '../user/Dashboard'
 
 class Navigation extends Component {
     constructor(props) {
@@ -25,12 +27,26 @@ class Navigation extends Component {
                             <NavItem>
                                 <Link to='/' className='nav-link active'> Home</Link>
                             </NavItem>
-                            <NavItem>
-                                <Link to='/login' className='nav-link'> Login</Link>
-                            </NavItem>
-                            <NavItem>
-                                <Link to='/register' className='nav-link'> Register</Link>
-                            </NavItem>
+                            {
+                                !isAuthenticated() && (<>
+                                    <NavItem>
+                                        <Link to='/login' className='nav-link'> Login</Link>
+                                    </NavItem>
+                                    <NavItem>
+                                        <Link to='/register' className='nav-link'> Register</Link>
+                                    </NavItem></>)
+                            }
+                            {
+                                isAuthenticated() && (<>
+                                    <NavItem>
+                                        <Link to='/logout' className='nav-link' onClick={() => { signout() }} >Logout</Link>
+                                    </NavItem>
+                                    <NavItem>
+                                        <Link to='/dashboard' className='nav-link' >User Dashboard</Link>
+                                    </NavItem>
+                                </>)
+                            }
+
                         </Nav>
                     </Collapse>
                 </Navbar >
