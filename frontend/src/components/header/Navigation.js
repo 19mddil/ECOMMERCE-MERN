@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Nav, Navbar, NavbarBrand, NavItem, NavbarToggler, Collapse } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { signout, isAuthenticated } from '../../utils/auth';
+import { signout, isAuthenticated, userInfo } from '../../utils/auth';
 
 class Navigation extends Component {
     constructor(props) {
@@ -41,7 +41,15 @@ class Navigation extends Component {
                                         <Link to='/logout' className='nav-link' onClick={() => { signout() }} >Logout</Link>
                                     </NavItem>
                                     <NavItem>
-                                        <Link to='/dashboard' className='nav-link'>User Dashboard</Link>
+                                        <Link to='/user/dashboard' className='nav-link'>User Dashboard</Link>
+                                    </NavItem>
+                                </>)
+                            }
+                            {
+                                isAuthenticated() && userInfo().role === 'admin' && (<>
+
+                                    <NavItem>
+                                        <Link to='/admin/dashboard' className='nav-link'>Admin Dashboard</Link>
                                     </NavItem>
                                 </>)
                             }
