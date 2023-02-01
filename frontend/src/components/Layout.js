@@ -13,7 +13,9 @@ const Layout = ({ title = 'Title', className, children }) => {
                 <Navigation />
             </div>
             <div className={className}>
-                {children}
+                <div>
+                    {children}
+                </div>
             </div>
         </div>
     )

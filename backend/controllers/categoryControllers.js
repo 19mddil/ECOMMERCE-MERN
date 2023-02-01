@@ -15,7 +15,8 @@ module.exports.createCategory = async (req, res) => {
         const category = await Category.create(_.pick(req.body, ['name']));
         return res.status(201).send({ messeage: "Category Creation Successful", category: _.pick(category, ['name']) });
     } catch (e) {
-        return res.status(500).send(e);
+        console.log(e.code);
+        return res.status(500).send(e.code === 11000 ? "Already Exists" : "Some unidentified problem");
     }
 }
 

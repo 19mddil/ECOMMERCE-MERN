@@ -2,22 +2,25 @@ import React from 'react';
 import Layout from '../Layout';
 import { Link } from 'react-router-dom';
 import { userInfo } from '../../utils/auth';
+import { Card, CardHeader, ListGroup, ListGroupItem } from 'reactstrap';
 
 const AdminDashboard = () => {
     const { name, email, role } = userInfo();
     const UserLinks = () => {
         return (
-            <div className="card">
-                <h4 className="card-header">User Links</h4>
-                <ul className="list-group">
-                    <li className="list-group-item">
-                        <Link className="nav-link" to="#">Create Category</Link>
-                    </li>
-                    <li className="list-group-item">
-                        <Link className="nav-link" to="#">Create Product</Link>
-                    </li>
-                </ul>
-            </div>
+            <Card >
+                <CardHeader>
+                    <h4>User Links</h4>
+                </CardHeader>
+                <ListGroup flush>
+                    <ListGroupItem>
+                        <Link to='/admin/create/category' className='nav-link'> Create Category</Link>
+                    </ListGroupItem>
+                    <ListGroupItem>
+                        <Link className="nav-link" to="/">Create Product</Link>
+                    </ListGroupItem>
+                </ListGroup>
+            </Card>
         )
     };
 
@@ -35,16 +38,28 @@ const AdminDashboard = () => {
     );
 
     return (
-        <Layout title="Dashboard" className="container-fluid">
-            <div className="row">
+        <div>
+
+            <Layout title="Dashboard" className="container-fluid">
+                <div className="row">
+                    <div className="col-sm-3">
+                        {UserLinks()}
+                    </div>
+                    <div className="col-sm-9">
+                        {UserInfo()}
+
+                    </div>
+                </div>
+                {/* <div className="row">
                 <div className="col-sm-3">
                     <UserLinks />
                 </div>
                 <div className="col-sm-9">
                     <UserInfo />
                 </div>
-            </div>
-        </Layout>
+            </div> */}
+            </Layout>
+        </div>
     )
 }
 

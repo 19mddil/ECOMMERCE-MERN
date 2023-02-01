@@ -1,11 +1,13 @@
 import React from "react"
 
 export const showError = (error, msg) => {
-    if (error) return (
-        <div className="alert alert-danger">
-            {msg}
-        </div>
-    )
+    if (error) {
+        return (
+            <div className="alert alert-danger">
+                {msg}
+            </div>
+        )
+    }
 }
 
 export const showSuccess = (success, msg) => {

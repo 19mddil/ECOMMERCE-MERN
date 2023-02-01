@@ -7,6 +7,7 @@ import Register from './user/Register';
 import Dashboard from './user/Dashboard';
 import { isAuthenticated, userInfo } from '../utils/auth';
 import AdminDashboard from './admin/AdminDashboard';
+import CreateCategory from './admin/createCategory';
 
 class Main extends Component {
     state = {
@@ -50,6 +51,18 @@ class Main extends Component {
                     element={
                         ((this.state.auth || isAuthenticated()) && (this.state.role === 'admin' || userInfo().role === 'admin')) ? (
                             <AdminDashboard />
+                        ) : (
+                            <Navigate
+                                to='/'
+                            />
+                        )
+                    }
+                />
+                <Route
+                    path='/admin/create/category'
+                    element={
+                        ((this.state.auth || isAuthenticated()) && (this.state.role === 'admin' || userInfo().role === 'admin')) ? (
+                            <CreateCategory />
                         ) : (
                             <Navigate
                                 to='/'
