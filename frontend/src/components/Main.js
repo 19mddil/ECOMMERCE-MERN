@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import { Routes, Route, Navigate } from 'react-router';
 import Home from './home/Home';
@@ -8,6 +7,7 @@ import Dashboard from './user/Dashboard';
 import { isAuthenticated, userInfo } from '../utils/auth';
 import AdminDashboard from './admin/AdminDashboard';
 import CreateCategory from './admin/createCategory';
+import CreateProduct from './admin/createProduct';
 
 class Main extends Component {
     state = {
@@ -63,6 +63,18 @@ class Main extends Component {
                     element={
                         ((this.state.auth || isAuthenticated()) && (this.state.role === 'admin' || userInfo().role === 'admin')) ? (
                             <CreateCategory />
+                        ) : (
+                            <Navigate
+                                to='/'
+                            />
+                        )
+                    }
+                />
+                <Route
+                    path='/admin/create/product'
+                    element={
+                        ((this.state.auth || isAuthenticated()) && (this.state.role === 'admin' || userInfo().role === 'admin')) ? (
+                            <CreateProduct />
                         ) : (
                             <Navigate
                                 to='/'
