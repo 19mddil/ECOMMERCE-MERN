@@ -75,11 +75,8 @@ const CreateProduct = () => {
 
 
         const { token } = userInfo();
-
-        console.log(formData);
         createProduct(token, formData)
             .then(res => {
-                console.log("here after axios post");
                 setValues({
                     ...values,
                     name: '',
@@ -94,7 +91,6 @@ const CreateProduct = () => {
                 })
             })
             .catch(err => {
-                console.log("afterhere");
                 let errMsg = "Something went wrong";
                 if (err.response) errMsg = err.response.data;
                 setValues({
@@ -168,7 +164,7 @@ const CreateProduct = () => {
             <div className="form-group">
                 <label className="text-muted">Category:</label>
                 <select name="category" value={category} onChange={handleChange} className="form-control" required>
-                    {/* <option value="">choose a category</option> */}
+                    <option value="">choose a category</option>
                     {categories && categories.map(item => (
                         <option value={item._id} key={item._id}>{item.name}</option>
                     ))}
