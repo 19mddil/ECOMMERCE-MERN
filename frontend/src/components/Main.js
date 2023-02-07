@@ -8,6 +8,7 @@ import { isAuthenticated, userInfo } from '../utils/auth';
 import AdminDashboard from './admin/AdminDashboard';
 import CreateCategory from './admin/createCategory';
 import CreateProduct from './admin/createProduct';
+import ProductDetail from './home/productDetail';
 
 class Main extends Component {
     state = {
@@ -83,6 +84,9 @@ class Main extends Component {
                     }
                 />
                 <Route path='/*' element={<Navigate to='/' />} />
+                <Route path='/product/:id' element={<ProductDetail />}>
+
+                </Route>
             </Routes >
         )
     }
