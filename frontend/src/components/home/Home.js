@@ -2,9 +2,11 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import Layout from '../Layout';
 import { isAuthenticated } from '../../utils/auth'
-import { getCategories, getProducts, getProductDetails } from '../../api/apiProduct';
+import { getCategories, getProducts, getFilteredProducts } from '../../api/apiProduct';
 import { showError, showSuccess } from '../../utils/messages'
-import CheckBox from './checkbox';
+import CheckBox from './Checkbox';
+import RadioBox from './RadioBox';
+import { prices } from '../../utils/prices';
 import Card from './Card';
 
 const Home = () => {
@@ -12,9 +14,14 @@ const Home = () => {
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
     const [limit, setLimit] = useState(30);
+    const [skip, setSkip] = useState(0);
     const [order, setOrder] = useState('asc');
     const [sortBy, setSortBy] = useState('price');
     const [categories, setCategories] = useState([]);
+    const [filters, setFilters] = useState({
+        category: [],
+        price: []
+    })
 
     useEffect(() => {
         getProducts(sortBy, order, limit)
@@ -26,14 +33,47 @@ const Home = () => {
             .catch(err => setError("Failed to load categories!"));
     }, []);
 
+
+    const handleFilters = (myfilters, filterBy) => {
+        const newFilters = {
+            ...filters
+        };
+        if (filterBy === 'category') {
+            newFilters[filterBy] = myfilters;
+        }
+        if (filterBy === 'price') {
+            const data = prices;
+            let arr = [];
+            for (let i in data) {
+                if (data[i].id === parseInt(myfilters)) {
+                    arr = data[i].arr;
+                }
+            }
+            newFilters[filterBy] = arr;
+        }
+        setFilters(newFilters);
+        getFilteredProducts(skip, limit, newFilters, order, sortBy)
+            .then(res => setProducts(res.data))
+            .catch(err => setError("Failed to load products"));
+
+    }
+
     const showFilters = () => {
         return (
             <>
                 <div className='row'>
                     <div className='col-sm-3'>
                         <h5>Filter by Category:</h5>
-                        <CheckBox categories={categories} />
-                        <ul></ul>
+                        <ul>
+                            <CheckBox categories={categories} handleFilters={myfilters => handleFilters(myfilters, 'category')} />
+                        </ul>
+                        {JSON.stringify(filters)}
+                    </div>
+                    <div className='col-sm-5'>
+                        <h5>Filter By Price</h5>
+                        <div className='row'>
+                            <RadioBox prices={prices} handleFilters={myfilters => handleFilters(myfilters, 'price')} />
+                        </div>
                     </div>
                 </div>
             </>
@@ -53,7 +93,7 @@ const Home = () => {
                 </div>
             </Layout>}
             {!isAuthenticated() && <Layout title='Home Page' className='container' >
-                jwt token expried
+                Please Login or SignUp
             </Layout>}
         </div>
 

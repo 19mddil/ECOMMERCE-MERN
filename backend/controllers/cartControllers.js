@@ -2,9 +2,9 @@ const _ = require('lodash');
 const { CartItem } = require('../models/cartItem');
 
 module.exports.createCartItem = async (req, res) => {
-    let { price, product } = _.pick(req.body, ['price', 'product']);
+    let { price, product } = _.pick(req.body, ['price', 'product']); // may be this product means product id.
     const item = await CartItem.findOne({
-        user: req.user._id,
+        user: req.user._id, //came from authorize middleware
         product: product
     });
     if (item) return res.status(400).send("Item already exists in the Cart");

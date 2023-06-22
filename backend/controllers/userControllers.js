@@ -31,8 +31,8 @@ module.exports.SignIn = async (req, res) => {
     if (!user) return res.status(400).send("email or password error");
     const boolvar = await bcrypt.compare(req.body.password, user.password);
     if (boolvar) {
-        res.status(201).send({ messeage: "Login Successful", user: _.pick(user, ['name', 'email', 'password', 'role']), token: user.genJWT() });
+        return res.status(201).send({ messeage: "Login Successful", user: _.pick(user, ['name', 'email', 'password', 'role']), token: user.genJWT() });
     } else {
-        res.status(200).send("username or password error");
+        return res.status(400).send("username or password error");
     }
 }

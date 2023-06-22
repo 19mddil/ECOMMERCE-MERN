@@ -23,12 +23,15 @@ module.exports.createProduct = async (req, res) => {
         if (error) return res.status(400).send(error.details[0].message);
         const product = new Product(fields);
         if (files.photo) {
-            console.log(files.photo);
+            // console.log(files.photo);
             fs.readFile(files.photo.filepath, (err, data) => {
                 if (err) return res.status(400).send("Problem in file data");
                 product.photo.data = data;
                 product.photo.contentType = files.photo.type;
                 product.save((err, result) => {
+                    if (err) {
+                        console.log(err.message); //what a joss mistake and trait of js.
+                    }
                     if (err) res.status(500).send("Internal Server Error");
                     else return res.status(201).send({
                         message: "product created successfully",
@@ -43,6 +46,7 @@ module.exports.createProduct = async (req, res) => {
     })
 }
 
+//http://localhost:3001/api/product?sortBy=price&order=desc
 module.exports.getProducts = async (req, res) => {
     let order = req.query.order === 'desc' ? -1 : 1;
     let sortBy = req.query.sortBy ? req.query.sortBy : '_id';
@@ -132,6 +136,7 @@ module.exports.filterProducts = async (req, res) => {
     let limit = req.body.limit ? parseInt(req.body.limit) : 10;
     let skip = parseInt(req.body.skip);
     let filters = req.body.filters;
+    console.log(filters);
     let args = {};
 
     for (let key in filters) {
@@ -150,6 +155,7 @@ module.exports.filterProducts = async (req, res) => {
         }
     }
 
+    console.log(args);
     const products = await Product.find(args)
         .select({ photo: 0 })
         .sort({ [sortBy]: order })
