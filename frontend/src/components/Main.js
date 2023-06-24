@@ -9,7 +9,9 @@ import AdminDashboard from './admin/AdminDashboard';
 import CreateCategory from './admin/createCategory';
 import CreateProduct from './admin/createProduct';
 import ProductDetail from './home/productDetail';
+import ShippingAddress from './order/ShippingAddress';
 import Cart from './order/Cart';
+import Checkout from './order/Checkout';
 
 class Main extends Component {
     state = {
@@ -53,6 +55,30 @@ class Main extends Component {
                     element={
                         this.state.auth || isAuthenticated() ? (
                             <Cart />
+                        ) : (
+                            <Navigate
+                                to="/login"
+                            />
+                        )
+                    }
+                />
+                <Route
+                    path='/user/shipping'
+                    element={
+                        this.state.auth || isAuthenticated() ? (
+                            <ShippingAddress />
+                        ) : (
+                            <Navigate
+                                to="/login"
+                            />
+                        )
+                    }
+                />
+                <Route
+                    path='/user/checkout'
+                    element={
+                        this.state.auth || isAuthenticated() ? (
+                            <Checkout />
                         ) : (
                             <Navigate
                                 to="/login"

@@ -5,7 +5,7 @@ module.exports.Profile = model('Profile', Schema({
         type: Schema.Types.ObjectId,
         unique: true,
         required: true,
-        ref: 'User'
+        ref: 'users'
     },
     phone: String,
     address1: String,

@@ -9,6 +9,7 @@ module.exports.getProfile = async (req, res) => {
 
 module.exports.setProfile = async (req, res) => {
     const userId = req.user._id;
+    console.log(req.body);
     const userProfile = _.pick(req.body,
         [
             "phone",
@@ -28,4 +29,5 @@ module.exports.setProfile = async (req, res) => {
         profile = new Profile(userProfile);
         await profile.save();
     }
+    return res.status(200).send("Updated successfullly");
 }
