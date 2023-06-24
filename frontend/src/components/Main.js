@@ -9,8 +9,7 @@ import AdminDashboard from './admin/AdminDashboard';
 import CreateCategory from './admin/createCategory';
 import CreateProduct from './admin/createProduct';
 import ProductDetail from './home/productDetail';
-
-import { useState, useEffect } from 'react';
+import Cart from './order/Cart';
 
 class Main extends Component {
     state = {
@@ -42,6 +41,18 @@ class Main extends Component {
                     element={
                         this.state.auth || isAuthenticated() ? (
                             <Dashboard />
+                        ) : (
+                            <Navigate
+                                to="/login"
+                            />
+                        )
+                    }
+                />
+                <Route
+                    path='/user/cart'
+                    element={
+                        this.state.auth || isAuthenticated() ? (
+                            <Cart />
                         ) : (
                             <Navigate
                                 to="/login"

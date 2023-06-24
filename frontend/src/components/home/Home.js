@@ -1,12 +1,13 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Layout from '../Layout';
-import { isAuthenticated } from '../../utils/auth'
 import { getCategories, getProducts, getFilteredProducts } from '../../api/apiProduct';
+import { addToCart } from '../../api/apiOrder';
 import { showError, showSuccess } from '../../utils/messages'
 import CheckBox from './Checkbox';
 import RadioBox from './RadioBox';
 import { prices } from '../../utils/prices';
+import { isAuthenticated, userInfo } from '../../utils/auth';
 import Card from './Card';
 
 const Home = () => {
@@ -33,6 +34,29 @@ const Home = () => {
             .catch(err => setError("Failed to load categories!"));
     }, []);
 
+
+    const handleAddToCart = product => () => {
+        if (isAuthenticated()) {
+            setError(false);
+            setSuccess(false);
+            const user = userInfo();
+            const cartItem = {
+                user: user._id,
+                product: product._id,
+                price: product.price
+            }
+            addToCart(user.token, cartItem)
+                .then(res => setSuccess(true))
+                .catch(err => {
+                    if (err.response) setError(err.response.data);
+                    else setError("Adding to Cart failed");
+                })
+        }
+        else {
+            setSuccess(false);
+            setError("Please Login First");
+        }
+    }
 
     const handleFilters = (myfilters, filterBy) => {
         const newFilters = {
@@ -86,10 +110,10 @@ const Home = () => {
                 {showFilters()}
                 <div style={{ width: '100%' }}>
                     {showError(error, error)}
-                    {showSuccess(success, "added to cart")}
+                    {showSuccess(success, "added to cart successfully now!")}
                 </div>
                 <div className='row'>
-                    {products && products.map(product => <Card product={product} key={product._id} />)}
+                    {products && products.map(product => <Card product={product} key={product._id} handleAddToCart={handleAddToCart(product)} />)}
                 </div>
             </Layout>}
             {!isAuthenticated() && <Layout title='Home Page' className='container' >

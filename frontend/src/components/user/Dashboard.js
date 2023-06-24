@@ -2,6 +2,7 @@ import React from 'react';
 import Layout from '../Layout';
 import { Link } from 'react-router-dom';
 import { userInfo } from '../../utils/auth';
+import { API } from '../../utils/config';
 
 const Dashboard = () => {
     const { name, email, role } = userInfo();
@@ -11,7 +12,7 @@ const Dashboard = () => {
                 <h4 className="card-header">User Links</h4>
                 <ul className="list-group">
                     <li className="list-group-item">
-                        <Link className="nav-link" to="#">My Cart</Link>
+                        <Link className="nav-link" to="/user/cart">My Cart</Link>
                     </li>
                     <li className="list-group-item">
                         <Link className="nav-link" to="#">Update Profile</Link>
@@ -45,7 +46,7 @@ const Dashboard = () => {
         <Layout title="Dashboard" className="container-fluid">
             <div className="row">
                 <div className="col-sm-3">
-                    <UserLinks />
+                    {UserLinks()}
                 </div>
                 <div className="col-sm-9">
                     <UserInfo />

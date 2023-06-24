@@ -13,6 +13,7 @@ module.exports.createCartItem = async (req, res) => {
         product: product,
         user: req.user._id
     });
+    console.log(req.body);
     const result = await cartItem.save();
     res.status(201).send({
         message: "Added to cart successfully",
@@ -22,12 +23,17 @@ module.exports.createCartItem = async (req, res) => {
 }
 
 module.exports.getCartItem = async (req, res) => {
-    const cartItems = await CartItem.find({
-        user: req.user._id
-    })
-        .populate('product', 'name')
-        .populate('user', 'name')
-    return res.status(200).send(cartItems);
+    try {
+
+        const cartItems = await CartItem.find({
+            user: req.user._id
+        })
+            .populate('product', 'name')
+            .populate('user', 'name')
+        return res.status(200).send(cartItems);
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 module.exports.updateCartItem = async (req, res) => {

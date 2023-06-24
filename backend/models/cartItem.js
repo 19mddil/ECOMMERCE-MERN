@@ -3,7 +3,7 @@ const { Schema, model } = require('mongoose');
 const CartItemSchema = Schema({
     product: {
         type: Schema.Types.ObjectId,
-        ref: "Product",
+        ref: "products",
         required: true
     },
     price: Number,
@@ -15,7 +15,7 @@ const CartItemSchema = Schema({
     },
     user: {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: "users",
         required: true
     }
 }, { timestamps: true });
