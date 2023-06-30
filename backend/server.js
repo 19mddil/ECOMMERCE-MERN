@@ -11,6 +11,9 @@ require('dotenv/config');
 const app = require('./app');
 const mongoose = require('mongoose');
 
+global.__basedir = __dirname;
+
+console.log(__basedir);
 
 mongoose.connect(process.env.MONGODB_URL.replace('<PASSWORD>', process.env.DB_PASSWORD), {
     useNewUrlParser: true,
