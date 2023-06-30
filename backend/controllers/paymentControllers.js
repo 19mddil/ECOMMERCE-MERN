@@ -1,9 +1,20 @@
 const PaymentSession = require('ssl-commerz-node').PaymentSession;
 const { CartItem } = require('../models/cartItem');
 const { Profile } = require('../models/userProfile');
+const { Order } = require('../models/order');
+const { Payment } = require('../models/payment');
 
 module.exports.ipn = async (req, res) => {
-    return res.status(200).send(JSON.parse(req.body));
+    const payment = new Payment(req.body);
+    const tran_id = payment['tran_id'];
+    if (payment['status'] === 'VALID') {
+        const order = await Order.updateOne({ transaction_id: tran_id }, { status: 'Complete' });
+        await CartItem.deleteMany(order.cartItems);
+    } else {
+        await Order.deleteOne({ transaction_id: tran_id });
+    }
+    await payment.save();
+    return res.status(200).send("IPN");
 }
 
 module.exports.initPayment = async (req, res) => {
@@ -29,7 +40,7 @@ module.exports.initPayment = async (req, res) => {
         success: "yoursite.com/success", // If payment Succeed
         fail: "yoursite.com/fail", // If payment failed
         cancel: "yoursite.com/cancel", // If user cancel payment
-        ipn: "yoursite.com/ipn", // SSLCommerz will send http post request in this link
+        ipn: "https://ecommerceapi.freelancebangla.com/api/payment/ipn", // SSLCommerz will send http post request in this link
     });
 
     // Set order details
@@ -75,5 +86,10 @@ module.exports.initPayment = async (req, res) => {
     });
 
     const response = await payment.paymentInit();
+    const order = new Order({ cartItems: cartItems, user: userId, transaction_id: tran_id, address: profile });
+    if (response.status === 'SUCCESS') {
+        order.sessionKey = response['sessionkey'];
+        await order.save();
+    }
     return res.status(200).send(response);
 }
