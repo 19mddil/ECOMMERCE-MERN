@@ -19,7 +19,8 @@
     "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
     "mongoose": "^6.8.2",
-    "reactstrap": "^9.1.5"
+    "reactstrap": "^9.1.5",
+    "ssl-commerz-node": "^1.0.4"
   },
   "devDependencies": {
     "morgan": "^1.10.0"

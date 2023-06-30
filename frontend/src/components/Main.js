@@ -12,6 +12,7 @@ import ProductDetail from './home/productDetail';
 import ShippingAddress from './order/ShippingAddress';
 import Cart from './order/Cart';
 import Checkout from './order/Checkout';
+import Payment from './order/Payment';
 
 class Main extends Component {
     state = {
@@ -79,6 +80,18 @@ class Main extends Component {
                     element={
                         this.state.auth || isAuthenticated() ? (
                             <Checkout />
+                        ) : (
+                            <Navigate
+                                to="/login"
+                            />
+                        )
+                    }
+                />
+                <Route
+                    path='/user/payment'
+                    element={
+                        this.state.auth || isAuthenticated() ? (
+                            <Payment />
                         ) : (
                             <Navigate
                                 to="/login"
