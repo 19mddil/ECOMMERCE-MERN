@@ -27,6 +27,11 @@ const userSchema = Schema({
         enum: ['user', 'admin'],
         default: 'user'
     },
+    verified: {
+        type: String,
+        enum: ['true', 'false'],
+        default: 'false'
+    },
 
 }, { timestamps: true });
 
@@ -35,7 +40,8 @@ userSchema.methods.genJWT = function () {
         _id: this._id,
         name: this.name,
         email: this.email,
-        role: this.role
+        role: this.role,
+        verified: this.verified,
     }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" });
     return token;
 }

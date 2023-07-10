@@ -24,3 +24,20 @@ export const showLoading = loading => {
         </div>
     )
 }
+
+export const showEmailSent = (success, msg) => {
+    if (success) return (
+        <div className="alert alert-success">
+            {msg}
+        </div>
+    )
+}
+
+export const showEmailNotSent = (failure, msg) => {
+    if (failure) return (
+        <div className="alert alert-danger">
+            {msg}
+        </div>
+    )
+}
+

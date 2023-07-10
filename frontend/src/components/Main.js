@@ -4,7 +4,7 @@ import Home from './home/Home';
 import Login from './user/Login';
 import Register from './user/Register';
 import Dashboard from './user/Dashboard';
-import { isAuthenticated, userInfo } from '../utils/auth';
+import { isAuthenticated, userInfo, isEmailVarified } from '../utils/auth';
 import AdminDashboard from './admin/AdminDashboard';
 import CreateCategory from './admin/createCategory';
 import CreateProduct from './admin/createProduct';
@@ -13,6 +13,8 @@ import ShippingAddress from './order/ShippingAddress';
 import Cart from './order/Cart';
 import Checkout from './order/Checkout';
 import Payment from './order/Payment';
+import EmailVerify from './user/EmailVerify';
+import ForgotPassword from './user/ForgotPassword';
 
 class Main extends Component {
     state = {
@@ -39,6 +41,8 @@ class Main extends Component {
                 <Route path='/login' element={this.state.auth || isAuthenticated() ? (<Home />) : (<Login />)} />
                 <Route path='/register' element={this.state.auth || isAuthenticated() ? (<Home />) : (<Register />)} />
                 <Route path='/logout' element={<Navigate to='/login' />} />
+                <Route path='/send/email' element={(this.state.auth || isAuthenticated()) === true && (isEmailVarified() === false) ? (<EmailVerify />) : (<Home />)} />
+                <Route path='/forgot/password' element={this.state.auth || isAuthenticated() ? (<Home />) : (<ForgotPassword />)} />
                 <Route
                     path='/user/dashboard'
                     element={

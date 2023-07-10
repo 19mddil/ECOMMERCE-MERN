@@ -35,6 +35,7 @@ const CreateProduct = () => {
     } = values;
 
     useEffect(() => {
+        console.log(userInfo().token);
         getCategories()
             .then(res => {
                 setValues({
@@ -75,6 +76,7 @@ const CreateProduct = () => {
 
 
         const { token } = userInfo();
+
         createProduct(token, formData)
             .then(res => {
                 setValues({

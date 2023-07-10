@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '../Layout';
 import { showError, showLoading } from '../../utils/messages';
 import { login } from '../../api/apiAuth';
@@ -79,6 +80,7 @@ class Login extends Component {
                 <label className="text-muted">Password:</label>
                 <input name="password" type="password" className="form-control"
                     value={this.state.redirectpassword} required onChange={this.handleChange} />
+                <Link to='/forgot/password'>Forgot Password</Link>
             </div>
             <button type="submit" className="btn btn-outline-primary" disabled={this.state.disabled}>Login</button>
         </form>

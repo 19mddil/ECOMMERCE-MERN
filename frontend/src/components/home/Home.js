@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '../Layout';
 import { getCategories, getProducts, getFilteredProducts } from '../../api/apiProduct';
 import { addToCart } from '../../api/apiOrder';
@@ -7,7 +8,7 @@ import { showError, showSuccess } from '../../utils/messages'
 import CheckBox from './Checkbox';
 import RadioBox from './RadioBox';
 import { prices } from '../../utils/prices';
-import { isAuthenticated, userInfo } from '../../utils/auth';
+import { isAuthenticated, isEmailVarified, userInfo } from '../../utils/auth';
 import Card from './Card';
 
 const Home = () => {
@@ -107,6 +108,9 @@ const Home = () => {
     return (
         <div>
             {isAuthenticated() && <Layout title='Home Page' className='container' >
+
+                {isEmailVarified() === false && (<Link to='/send/email'>Verify Email</Link>)}
+                <p>Hi, {userInfo().role} user, email: {userInfo().email} {isEmailVarified() === true && (<span style={{ color: 'green' }}>(verified)</span>)}</p>
                 {showFilters()}
                 <div style={{ width: '100%' }}>
                     {showError(error, error)}
@@ -118,6 +122,9 @@ const Home = () => {
             </Layout>}
             {!isAuthenticated() && <Layout title='Home Page' className='container' >
                 Please Login or SignUp
+                <div className='row'>
+                    {products && products.map(product => <Card product={product} key={product._id} handleAddToCart={handleAddToCart(product)} />)}
+                </div>
             </Layout>}
         </div>
 

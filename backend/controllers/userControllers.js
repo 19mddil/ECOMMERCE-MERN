@@ -3,6 +3,7 @@ const _ = require('lodash');
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', true);
 const { User, validate } = require('../models/user');
+const SendEmail = require('../utils/sendEmail');
 
 
 
@@ -35,4 +36,52 @@ module.exports.SignIn = async (req, res) => {
     } else {
         return res.status(400).send("username or password error");
     }
+}
+
+module.exports.SendEmail = async (req, res) => {
+    try {
+        console.log("Sending Email....");
+        console.log(req.body);
+        const user = await User.findOne({ email: req.body.email });
+        if (!user) {
+            return res.status(400).send(new Error("user doesn't exist please register"));
+        }
+        //await SendEmail(req.body.email, "Verify Code", req.body.code);
+        return res.status(201).send({ message: "email sent successfully" })
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send("Email couldn't be sent");
+    }
+}
+
+module.exports.VerifyEmail = async (req, res) => {
+    try {
+        const result = await User.updateOne({ email: req.body.email }, { $set: { "verified": "true" } })
+        if (!result) {
+            return res.status(403).send("couldn't verify the user,try again later");
+        }
+        const user = await User.findOne({ email: req.body.email });
+        return res.status(201).send({ messeage: "Email Verification Successful", user: _.pick(user, ['name', 'email', 'password', 'role']), token: user.genJWT() });
+
+    }
+    catch (err) {
+        return res.status(500).send(err.message);
+    }
+}
+
+module.exports.SetNewPassword = async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.body.email });
+        if (!user) return res.status(409).send("User does not exist, Please Register.");
+        const salt = await bcrypt.genSalt(10);
+        console.log(salt);
+        console.log(req.body.password);
+        req.body.password = await bcrypt.hash(req.body.password, salt);
+        await User.updateOne({ email: req.body.email }, { $set: { "password": req.body.password, "verified": "true" } })
+        return res.status(201).send({ messeage: "User Password Successfully Updated" });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send(err.message);
+    }
+
 }
