@@ -3,7 +3,7 @@ const _ = require('lodash');
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', true);
 const { User, validate } = require('../models/user');
-const SendEmail = require('../utils/sendEmail');
+const Sendemail = require('../utils/sendEmail');
 
 
 
@@ -46,7 +46,11 @@ module.exports.SendEmail = async (req, res) => {
         if (!user) {
             return res.status(400).send(new Error("user doesn't exist please register"));
         }
-        //await SendEmail(req.body.email, "Verify Code", req.body.code);
+        let error = await Sendemail(req.body.email, "Verify Code", req.body.code);
+        console.log("here", error.message);
+        if (error) {
+            return res.status(500).send({ msg: error.message });
+        }
         return res.status(201).send({ message: "email sent successfully" })
     } catch (err) {
         console.log(err);

@@ -24,7 +24,7 @@ class Navigation extends Component {
                     <Collapse isOpen={this.state.isNavOpen} navbar>
                         <Nav className='mr-auto' navbar>
                             <NavItem>
-                                <Link to='/' className='nav-link active'> Home</Link>
+                                <Link to='/' className='nav-link'> Home</Link>
                             </NavItem>
                             {
                                 !isAuthenticated() && (<>
@@ -42,6 +42,9 @@ class Navigation extends Component {
                                     </NavItem>
                                     <NavItem>
                                         <Link to='/user/dashboard' className='nav-link'>User Dashboard</Link>
+                                    </NavItem>
+                                    <NavItem>
+                                        <Link to='/user/cart' className='nav-link'>My Cart</Link>
                                     </NavItem>
                                 </>)
                             }

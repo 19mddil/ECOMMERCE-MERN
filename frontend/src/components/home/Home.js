@@ -92,7 +92,6 @@ const Home = () => {
                         <ul>
                             <CheckBox categories={categories} handleFilters={myfilters => handleFilters(myfilters, 'category')} />
                         </ul>
-                        {JSON.stringify(filters)}
                     </div>
                     <div className='col-sm-5'>
                         <h5>Filter By Price</h5>

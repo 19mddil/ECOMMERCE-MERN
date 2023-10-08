@@ -10,13 +10,14 @@ const Register = () => {
         name: '',
         email: '',
         password: '',
+        surepassword: '',
         error: false,
         loading: false,
         disabled: false,
         success: false
     });
 
-    const { name, email, password, success, error, loading, disabled } = values;
+    const { name, email, password, surepassword, success, error, loading, disabled } = values;
 
     const handleChange = e => {
         setValues({
@@ -34,33 +35,45 @@ const Register = () => {
             loading: true,
             disabled: true
         });
-
-        //this is a axios function
-        register({
-            name,
-            email,
-            password
-        }).then(response => {
-            setValues({
-                name: '',
-                email: '',
-                password: '',
-                success: true,
-                disabled: false,
-                loading: false
-            })
-        }).catch(err => {
-            let errMsg = 'Something went wrong';
-            if (err.response) {
-                errMsg = err.response.data;
-            }
+        if (password !== surepassword) {
             setValues({
                 ...values,
-                error: errMsg,
+                error: "Password did not match",
                 disabled: false,
                 loading: false
             })
-        })
+        }
+        else {
+            //this is a axios function
+            register({
+                name,
+                email,
+                password
+            }).then(response => {
+                setValues({
+                    name: '',
+                    email: '',
+                    password: '',
+                    surepassword: '',
+                    success: true,
+                    disabled: false,
+                    loading: false,
+                    error: false,
+                })
+            }).catch(err => {
+                let errMsg = 'Something went wrong';
+                if (err.response) {
+                    errMsg = err.response.data;
+                }
+                setValues({
+                    ...values,
+                    error: errMsg,
+                    disabled: false,
+                    loading: false
+                })
+            })
+        }
+
     }
 
     const signUpForm = () => (
@@ -79,6 +92,11 @@ const Register = () => {
                 <label className="text-muted">Password:</label>
                 <input type="password" name="password" className="form-control"
                     value={password} required onChange={handleChange} />
+            </div>
+            <div className="form-group">
+                <label className="text-muted"> Confirm Password:</label>
+                <input type="password" name="surepassword" className="form-control"
+                    value={surepassword} required onChange={handleChange} />
             </div>
             <button type="submit" className="btn btn-primary" disabled={disabled}>Create Account</button>
         </form>

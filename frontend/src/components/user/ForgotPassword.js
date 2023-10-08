@@ -11,6 +11,9 @@ class ForgotPassword extends Component {
         disabledOne: false,
         disabledTwo: true,
         disabledThree: true,
+        ActivateOne: true,
+        ActivateTwo: false,
+        ActivateThree: false,
         emailSuccess: false,
         emailNotSuccess: false,
         loading: false,
@@ -18,7 +21,8 @@ class ForgotPassword extends Component {
         errorMsg: '',
         newPasswordOne: '',
         newPasswordTwo: '',
-        success: false
+        success: false,
+
 
     }
     handleChange = e => {
@@ -32,6 +36,10 @@ class ForgotPassword extends Component {
         this.setState({
             loading: true,
             disabledOne: true,
+            ActivateOne: true,
+            ActivateTwo: false,
+            ActivateThree: false,
+
         })
         console.log(this.state.email);
         console.log(this.state.role);
@@ -45,19 +53,23 @@ class ForgotPassword extends Component {
                     disabledOne: true,
                     disabledTwo: false,
                     disabledThree: true,
-
+                    ActivateOne: false,
+                    ActivateTwo: true,
+                    ActivateThree: false,
                 })
             })
             .catch(err => {
-                console.log(err);
                 this.setState({
                     error: true,
-                    errorMsg: "User does not exist",
+                    errorMsg: err.response.data.msg,
                     emailNotSuccess: false,
                     loading: false,
                     disabledOne: false,
                     disableTwo: true,
                     disabledThree: true,
+                    ActivateOne: true,
+                    ActivateTwo: false,
+                    ActivateThree: false,
                 })
             })
     }
@@ -68,13 +80,19 @@ class ForgotPassword extends Component {
             error: false,
             loading: true,
             disabledTwo: true,
+            ActivateOne: false,
+            ActivateTwo: true,
+            ActivateThree: false,
         })
-        console.log(this.state.intputCode);
+        console.log(this.state.inputCode);
         if (this.state.inputCode === this.state.code) {
             this.setState({
                 emailSuccess: false,
                 loading: false,
-                disabledThree: false
+                disabledThree: false,
+                ActivateOne: false,
+                ActivateTwo: false,
+                ActivateThree: true,
             })
         } else {
             this.setState({
@@ -82,7 +100,10 @@ class ForgotPassword extends Component {
                 loading: false,
                 disabledTwo: false,
                 error: true,
-                errorMsg: "Pin did not match"
+                errorMsg: "Pin did not match",
+                ActivateOne: false,
+                ActivateTwo: true,
+                ActivateThree: false,
             })
         }
     }
@@ -92,24 +113,33 @@ class ForgotPassword extends Component {
         this.setState({
             loading: true,
             disabledThree: true,
+            ActivateOne: false,
+            ActivateTwo: false,
+            ActivateThree: true,
         })
         if (this.state.newPasswordOne !== this.state.newPasswordTwo) {
             this.setState({
                 loading: false,
                 disabledThree: false,
                 error: true,
-                errorMsg: 'password did not match'
+                errorMsg: 'password did not match',
+                ActivateOne: false,
+                ActivateTwo: false,
+                ActivateThree: true,
             })
         }
         else {
             updateUserWithNewPassword({ email: this.state.email, password: this.state.newPasswordOne })
                 .then(res => {
-                    console.log("horah");
+                    //console.log("horah");
                     this.setState({
                         error: false,
                         success: true,
                         disabledThree: true,
-                        loading: false
+                        loading: false,
+                        ActivateOne: false,
+                        ActivateTwo: false,
+                        ActivateThree: false,
                     })
                 })
                 .catch(err => {
@@ -117,7 +147,10 @@ class ForgotPassword extends Component {
                         success: false,
                         disabledThree: false,
                         error: true,
-                        errorMsg: err.message
+                        errorMsg: err.message,
+                        ActivateOne: false,
+                        ActivateTwo: false,
+                        ActivateThree: true,
                     })
                 })
         }
@@ -136,45 +169,46 @@ class ForgotPassword extends Component {
                 {showEmailNotSent(this.state.emailNotSuccess, "Email couldn't be sent,Enter Your Email Address Again.")}
                 {showLoading(this.state.loading)}
                 {showError(this.state.error, this.state.errorMsg)}
-                {this.showSuccess()}
-                <h3>Enter your Registered Email</h3>
+
+                <h3 style={{ color: this.state.ActivateOne ? 'green' : 'grey' }}>enter your registered email</h3>
                 <hr />
                 <form onSubmit={this.handleEmailSubmit} >
                     <div className="form-group">
                         <label className='text-muted'>Enter your email:</label>
                         <input name='email' type='email' className='form-control' value={this.state.email} required onChange={this.handleChange} disabled={this.state.disabledOne} />
                     </div>
-                    <button type="submit" className='btn btn-outline-primary' disabled={this.state.disabledOne}>Send Me Code</button>
+                    <button type="submit" className='btn btn-outline-primary' disabled={this.state.disabledOne}>send me code</button>
                 </form>
                 <hr />
 
-                <h3>Input the 6 digit Code sent to your Email</h3>
+                <h3 style={{ color: this.state.ActivateTwo ? 'green' : 'grey' }}>input the 6 digit code sent to your email</h3>
                 <hr />
                 <form onSubmit={this.handleCodeSubmit} >
                     <div className="form-group">
-                        <label className='text-muted'>Enter Six Digit Code Sent to your {this.state.email}:</label>
+                        <label className='text-muted'>enter six digit code sent to your {this.state.email}:</label>
                         <input name='inputCode' type='number' className='form-control' value={this.state.inputCode} required onChange={this.handleChange} disabled={this.state.disabledTwo} />
                     </div>
-                    <button type="submit" className='btn btn-outline-primary' disabled={this.state.disabledTwo}>Lets Change my password</button>
+                    <button type="submit" className='btn btn-outline-primary' disabled={this.state.disabledTwo}>lets change my password</button>
                 </form>
                 <hr />
 
-                <h3>Set New Password</h3>
+                <h3 style={{ color: this.state.ActivateThree ? 'green' : 'grey' }}>set new password</h3>
                 <hr />
                 <form onSubmit={this.handleNewPasswordSubmit}>
 
                     <div className="form-group">
-                        <label className="text-muted">Set New Password:</label>
+                        <label className="text-muted">set new password:</label>
                         <input type="password" name="newPasswordOne" className="form-control"
                             value={this.state.newPasswordOne} required onChange={this.handleChange} disabled={this.state.disabledThree} />
                     </div>
                     <div className="form-group">
-                        <label className="text-muted">Type New Password:</label>
+                        <label className="text-muted">type new password:</label>
                         <input type="password" name="newPasswordTwo" className="form-control"
                             value={this.state.newPasswordTwo} required onChange={this.handleChange} disabled={this.state.disabledThree} />
                     </div>
-                    <button type="submit" className="btn btn-primary" disabled={this.state.disabledThree}>Create Account</button>
+                    <button type="submit" className="btn btn-primary" disabled={this.state.disabledThree}>Change Password</button>
                 </form>
+                {this.showSuccess()}
                 <hr />
             </Layout>
         )

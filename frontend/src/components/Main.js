@@ -31,12 +31,13 @@ class Main extends Component {
                 role: role
             })
         }
-        //console.log(this.state.role);
+
     }
     render() {
-        this.useAuth();
+
         return (
-            <Routes>
+            < Routes >
+                {this.useAuth()}
                 <Route path='/' element={<Home />} />
                 <Route path='/login' element={this.state.auth || isAuthenticated() ? (<Home />) : (<Login />)} />
                 <Route path='/register' element={this.state.auth || isAuthenticated() ? (<Home />) : (<Register />)} />

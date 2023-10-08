@@ -14,9 +14,9 @@ const Dashboard = () => {
                     <li className="list-group-item">
                         <Link className="nav-link" to="/user/cart">My Cart</Link>
                     </li>
-                    <li className="list-group-item">
-                        <Link className="nav-link" to="#">Update Profile</Link>
-                    </li>
+                    {/* <li className="list-group-item">
+                        <Link className="nav-link" to="#" >Update Profile</Link>
+                    </li> */}
                 </ul>
             </div>
         )
@@ -50,7 +50,7 @@ const Dashboard = () => {
                 </div>
                 <div className="col-sm-9">
                     <UserInfo />
-                    <PurchaseHistory />
+                    {/* <PurchaseHistory /> */}
                 </div>
             </div>
         </Layout>

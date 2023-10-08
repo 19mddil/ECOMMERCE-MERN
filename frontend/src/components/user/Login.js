@@ -65,7 +65,7 @@ class Login extends Component {
     }
     redirectUser = () => {
         if (this.state.redirect) {
-            return (<Navigate to='/' />)
+            window.location.reload();
         }
     }
 

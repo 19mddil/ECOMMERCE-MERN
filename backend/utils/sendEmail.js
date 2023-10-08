@@ -13,14 +13,15 @@ module.exports = async (email, subject, text) => {
         });
 
         await transporter.sendMail({
-            from: 'mddilshadul98@freelancebangla.com', //server user
+            from: process.env.MAIL_USER, //server user
             to: email,
             subject: subject,
             text: text
         });
         console.log("email send successfully");
+        return false;
     }
     catch (err) {
-        console.log(err);
+        return err;
     }
 }

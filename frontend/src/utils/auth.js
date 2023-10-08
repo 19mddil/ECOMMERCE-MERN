@@ -21,6 +21,13 @@ export const isAuthenticated = () => {
     else return false;
 }
 
+export const signout = () => {
+    if (typeof window !== 'undefined') {
+        //localStorage.clear();
+        localStorage.removeItem('jwt');
+    }
+}
+
 export const isEmailVarified = () => {
     if (typeof window === 'undefined') return false;
     if (localStorage.getItem('jwt')) {
@@ -41,11 +48,5 @@ export const userInfo = () => {
     return {
         ...decoded,
         token: jwt
-    }
-}
-
-export const signout = () => {
-    if (typeof window !== 'undefined') {
-        localStorage.removeItem('jwt');
     }
 }
